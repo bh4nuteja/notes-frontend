@@ -1,2 +1,2 @@
-const API = 'http://localhost:5000';
+const API = 'https://notes-backend-nflb.onrender.com';
 export default API;

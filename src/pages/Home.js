@@ -14,9 +14,12 @@ function Home() {
   const { theme, isDark, toggle } = useTheme();
 
   useEffect(() => {
-    if (!token) return navigate('/login');
-    fetchNotes();
-  }, []);
+  if (!token) {
+    navigate('/login');
+    return;
+  }
+  fetchNotes();
+}, [token, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchNotes = async () => {
     try {
