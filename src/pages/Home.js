@@ -11,27 +11,24 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const { theme, isDark, toggle } = useTheme();
+  const { theme, isDark, toggleTheme } = useTheme();
 
-  useEffect(() => {
-  if (!token) {
+ async function fetchNotes() {
+  try {
+    const res = await axios.get(`${API}/api/notes`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setNotes(res.data);
+  } catch (err) {
     navigate('/login');
-    return;
   }
-  fetchNotes();
-}, [token, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
+  setLoading(false);
+}
 
-  const fetchNotes = async () => {
-    try {
-      const res = await axios.get(`${API}/api/notes`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setNotes(res.data);
-    } catch (err) {
-      navigate('/login');
-    }
-    setLoading(false);
-  };
+useEffect(function fetchOnMount() {
+  if (!token) return navigate('/login');
+  fetchNotes();
+}, []);
 
   const handleNoteAdded = (newNote) => setNotes([newNote, ...notes]);
 
@@ -73,33 +70,43 @@ function Home() {
       <div style={{ background: theme.navbar, padding: '14px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <h1 style={{ color: '#fff', fontSize: 18, fontWeight: 600, letterSpacing: '-0.3px', margin: 0 }}>NoteAI</h1>
-          <span style={{ background: theme.navbarBadge, color: theme.navbarText, fontSize: 11, padding: '3px 8px', borderRadius: 20, marginLeft: 8 }}>
-            GPT-4.1 nano
+          <span style={{ background: theme.navBadge, color: theme.navText, fontSize: 11, padding: '3px 8px', borderRadius: 20, marginLeft: 8 }}>
+            Gemini 2.5 Flash
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+
           {/* Dark mode toggle */}
           <button
-            onClick={toggle}
-            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            onClick={toggleTheme}
             style={{
               background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              color: '#fff', padding: '7px 12px',
-              borderRadius: 8, fontSize: 15,
-              cursor: 'pointer', fontFamily: 'inherit'
+              border: `1px solid ${theme.navBtnBorder}`,
+              color: theme.navText,
+              padding: '7px 12px',
+              borderRadius: 8,
+              fontSize: 13,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6
             }}
           >
-            {isDark ? '☀️' : '🌙'}
+            {isDark ? '☀ Light' : '☾ Dark'}
           </button>
+
           <button
             onClick={handleLogout}
             style={{
               background: 'transparent',
-              border: '1px solid rgba(255,255,255,0.3)',
-              color: theme.navbarText, padding: '7px 14px',
-              borderRadius: 8, fontSize: 13,
-              cursor: 'pointer', fontFamily: 'inherit'
+              border: `1px solid ${theme.navBtnBorder}`,
+              color: theme.navText,
+              padding: '7px 14px',
+              borderRadius: 8,
+              fontSize: 13,
+              cursor: 'pointer',
+              fontFamily: 'inherit'
             }}
           >
             Log out
@@ -112,9 +119,7 @@ function Home() {
         <NoteEditor onNoteAdded={handleNoteAdded} />
 
         {loading && (
-          <p style={{ textAlign: 'center', color: theme.emptyText, fontSize: 14 }}>
-            Loading notes...
-          </p>
+          <p style={{ textAlign: 'center', color: theme.muted, fontSize: 14 }}>Loading notes...</p>
         )}
 
         {!loading && notes.length === 0 && (

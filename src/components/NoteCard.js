@@ -5,16 +5,16 @@ function NoteCard({ note, onDelete, onSummarise }) {
   const [loading, setLoading] = useState(false);
   const { theme } = useTheme();
 
-  const handleSummarise = async () => {
+  async function handleSummarise() {
     setLoading(true);
     await onSummarise(note._id);
     setLoading(false);
-  };
+  }
 
   return (
     <div style={{
       background: theme.surface,
-      border: `1px solid ${theme.cardBorder}`,
+      border: `1px solid ${theme.border}`,
       borderRadius: 14,
       padding: '18px 20px',
       marginBottom: 14,
@@ -23,15 +23,15 @@ function NoteCard({ note, onDelete, onSummarise }) {
     }}>
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 6 }}>
-        <p style={{ fontSize: 15, fontWeight: 600, color: theme.text, margin: 0 }}>
+        <p style={{ fontSize: 15, fontWeight: 600, color: theme.title, margin: 0 }}>
           {note.title}
         </p>
-        <span style={{ fontSize: 11, color: theme.textHint, whiteSpace: 'nowrap', marginLeft: 12 }}>
+        <span style={{ fontSize: 11, color: theme.muted, whiteSpace: 'nowrap', marginLeft: 12 }}>
           {new Date(note.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
         </span>
       </div>
 
-      <p style={{ fontSize: 13, color: theme.textMuted, lineHeight: 1.65, margin: '0 0 14px' }}>
+      <p style={{ fontSize: 13, color: theme.body, lineHeight: 1.65, margin: '0 0 14px' }}>
         {note.content}
       </p>
 
@@ -58,11 +58,15 @@ function NoteCard({ note, onDelete, onSummarise }) {
           onClick={handleSummarise}
           disabled={loading}
           style={{
-            background: loading ? theme.primaryDisabled : theme.primary,
-            color: '#fff', border: 'none', borderRadius: 8,
-            padding: '8px 14px', fontSize: 12, fontWeight: 500,
+            background: loading ? '#a5b4fc' : '#4f46e5',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 8,
+            padding: '8px 14px',
+            fontSize: 12,
+            fontWeight: 500,
             cursor: loading ? 'not-allowed' : 'pointer',
-            fontFamily: 'inherit', transition: 'background 0.2s'
+            fontFamily: 'inherit'
           }}
         >
           {loading ? 'Summarising...' : note.summary ? 'Re-summarise' : 'Summarise with AI'}
@@ -72,12 +76,14 @@ function NoteCard({ note, onDelete, onSummarise }) {
           onClick={() => onDelete(note._id)}
           style={{
             background: 'transparent',
-            color: theme.deleteText,
-            border: `1px solid ${theme.deleteBorder}`,
-            borderRadius: 8, padding: '8px 14px',
-            fontSize: 12, fontWeight: 500,
-            cursor: 'pointer', fontFamily: 'inherit',
-            transition: 'border 0.2s'
+            color: '#ef4444',
+            border: '1px solid #fecaca',
+            borderRadius: 8,
+            padding: '8px 14px',
+            fontSize: 12,
+            fontWeight: 500,
+            cursor: 'pointer',
+            fontFamily: 'inherit'
           }}
         >
           Delete

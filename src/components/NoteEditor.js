@@ -39,25 +39,19 @@ function NoteEditor({ onNoteAdded }) {
     boxSizing: 'border-box',
     outline: 'none',
     marginBottom: 10,
-    transition: 'border 0.2s, background 0.2s'
+    transition: 'background 0.2s, color 0.2s'
   };
 
   return (
     <div style={{
       background: theme.surface,
-      border: `1px solid ${theme.surfaceBorder}`,
+      border: `1px solid ${theme.editorBorder}`,
       borderRadius: 14,
       padding: 20,
       marginBottom: 24,
       transition: 'background 0.2s'
     }}>
-      <p style={{
-        fontSize: 11, fontWeight: 600,
-        color: theme.editorLabel,
-        letterSpacing: '0.6px',
-        textTransform: 'uppercase',
-        margin: '0 0 12px'
-      }}>
+      <p style={{ fontSize: 11, fontWeight: 600, color: theme.label, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 12px' }}>
         New note
       </p>
       <input
@@ -77,11 +71,15 @@ function NoteEditor({ onNoteAdded }) {
         onClick={handleSave}
         disabled={saving}
         style={{
-          background: saving ? theme.primaryDisabled : theme.primary,
-          color: '#fff', border: 'none', borderRadius: 8,
-          padding: '10px 20px', fontSize: 13, fontWeight: 500,
+          background: saving ? '#a5b4fc' : '#4f46e5',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 8,
+          padding: '10px 20px',
+          fontSize: 13,
+          fontWeight: 500,
           cursor: saving ? 'not-allowed' : 'pointer',
-          fontFamily: 'inherit', transition: 'background 0.2s'
+          fontFamily: 'inherit'
         }}
       >
         {saving ? 'Saving...' : 'Save note'}
