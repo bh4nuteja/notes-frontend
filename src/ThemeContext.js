@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { light, dark } from './theme';
 

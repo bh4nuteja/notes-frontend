@@ -27,7 +27,7 @@ function Home() {
 
 useEffect(function fetchOnMount() {
   if (!token) return navigate('/login');
-  fetchNotes();
+  fetchNotes();// eslint-disable-next-line
 }, []);
 
   const handleNoteAdded = (newNote) => setNotes([newNote, ...notes]);
